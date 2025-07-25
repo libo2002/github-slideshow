@@ -1,13 +1,172 @@
-# Your GitHub Learning Lab Repository for Introducing GitHub
+# 基于最小二乘法的圆柱度误差评定算法
 
-Welcome to **your** repository for your GitHub Learning Lab course. This repository will be used during the different activities that I will be guiding you through. See a word you don't understand? We've included an emoji 📖 next to some key terms. Click on it to see its definition.
+## 简介
 
-Oh! I haven't introduced myself...
+本程序实现了基于最小二乘法的圆柱度误差评定算法，用于评估圆柱形零件的几何精度。程序包含完整的数据生成、算法实现和可视化功能。
 
-I'm the GitHub Learning Lab bot and I'm here to help guide you in your journey to learn and master the various topics covered in this course. I will be using Issue and Pull Request comments to communicate with you. In fact, I already added an issue for you to check out.
+## 主要功能
 
-![issue tab](https://lab.github.com/public/images/issue_tab.png)
+1. **数据生成**：模拟实际测量点数据，包含各种形状误差
+2. **最小二乘拟合**：使用非线性最小二乘法拟合理想圆柱
+3. **误差计算**：计算圆柱度误差值
+4. **可视化展示**：多角度展示分析结果
 
-I'll meet you over there, can't wait to get started!
+## 文件说明
 
-This course is using the :sparkles: open source project [reveal.js](https://github.com/hakimel/reveal.js/). In some cases we’ve made changes to the history so it would behave during class, so head to the original project repo to learn more about the cool people behind this project.
+- `cylindricity_evaluation.m` - 主程序文件，包含所有核心函数
+- `run_cylindricity_test.m` - 简单测试脚本
+- `README.md` - 本说明文档
+
+## 使用方法
+
+### 方法1：直接运行主函数
+```matlab
+cylindricity_evaluation();
+```
+
+### 方法2：运行测试脚本
+```matlab
+run_cylindricity_test;
+```
+
+## 算法原理
+
+### 1. 圆柱参数表示
+圆柱由以下参数定义：
+- 轴线中心坐标：(x₀, y₀)
+- 轴线方向向量：(ax, ay, az)
+- 圆柱半径：r
+
+### 2. 最小二乘拟合
+使用非线性最小二乘法优化目标函数：
+```
+min Σ(di - r)²
+```
+其中 di 是第i个测量点到圆柱轴线的距离。
+
+### 3. 圆柱度误差计算
+圆柱度误差定义为：
+```
+圆柱度误差 = max(残差) - min(残差)
+```
+
+## 程序结构
+
+### 主要函数
+
+1. **cylindricity_evaluation()** - 主函数，协调整个评定流程
+2. **generate_test_data()** - 生成模拟测量数据
+3. **fit_cylinder_least_squares()** - 最小二乘法拟合圆柱
+4. **cylinder_residuals()** - 计算点到圆柱的残差
+5. **calculate_cylindricity_error()** - 计算圆柱度误差
+6. **visualize_results()** - 可视化结果
+
+### 可视化功能
+
+程序生成包含4个子图的综合分析图：
+
+1. **3D点云与拟合圆柱**
+   - 显示原始测量点
+   - 显示拟合的理想圆柱面
+   - 3D立体视图
+
+2. **残差分布直方图**
+   - 显示残差的统计分布
+   - 标注均值和标准差
+   - 评估数据质量
+
+3. **残差沿轴向变化**
+   - 显示残差沿Z轴的变化趋势
+   - 识别系统性误差
+   - 拟合趋势线
+
+4. **误差统计信息**
+   - 最小/最大残差
+   - 平均残差和标准差
+   - 最终圆柱度误差值
+
+## 测试数据特征
+
+程序生成的测试数据包含以下特征：
+- 8个截面，每个截面16个测量点
+- 轴线略有倾斜（模拟实际情况）
+- 随机测量噪声
+- 系统性形状误差：
+  - 椭圆度误差
+  - 锥度误差
+
+## 输出结果
+
+### 控制台输出
+```
+========== 圆柱度误差评定结果 ==========
+真实圆柱参数：
+  中心坐标: (0.000, 0.000)
+  轴线方向: (0.099, 0.050, 0.995)
+  半径: 10.000
+
+拟合圆柱参数：
+  中心坐标: (-0.001, 0.002)
+  轴线方向: (0.098, 0.049, 0.994)
+  半径: 10.001
+
+圆柱度误差: 0.234567
+=======================================
+```
+
+### 图形输出
+生成综合分析图，包含多个视图的误差分析结果。
+
+## 应用场景
+
+1. **机械加工质量控制**
+   - 轴类零件精度检测
+   - 缸体、套筒类零件检测
+
+2. **计量测试**
+   - 三坐标测量机数据分析
+   - 圆度仪数据处理
+
+3. **科研教学**
+   - 几何公差原理演示
+   - 数值算法验证
+
+## 技术特点
+
+1. **算法稳健性**
+   - PCA初值估计
+   - 非线性优化求解
+   - 数值稳定性好
+
+2. **可视化丰富**
+   - 多角度数据展示
+   - 统计信息完整
+   - 结果直观易懂
+
+3. **扩展性强**
+   - 模块化设计
+   - 易于修改参数
+   - 支持实际数据输入
+
+## 系统要求
+
+- MATLAB R2016b 或更高版本
+- 优化工具箱（Optimization Toolbox）
+- 统计和机器学习工具箱（Statistics and Machine Learning Toolbox）
+
+## 注意事项
+
+1. 程序默认使用模拟数据，实际应用时需要修改数据输入部分
+2. 对于大量数据，可能需要调整优化算法参数
+3. 可根据实际需求调整可视化图形的显示参数
+
+## 扩展建议
+
+1. **数据输入接口**：添加从文件读取实际测量数据的功能
+2. **多种拟合方法**：实现最小区域法、最大内接圆柱法等
+3. **不确定度分析**：添加测量不确定度评估功能
+4. **报告生成**：自动生成标准化的检测报告
+
+## 作者信息
+
+本程序基于经典的几何公差评定理论实现，适用于教学和工程应用。
